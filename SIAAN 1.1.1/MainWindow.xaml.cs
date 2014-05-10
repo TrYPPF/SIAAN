@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +20,7 @@ using System.CodeDom.Compiler;
 using System.Management;
 using System.IO;
 using System.Text.RegularExpressions;
+using Microsoft.Win32;
 
 namespace SIAAN_1._1._1
 {
@@ -35,6 +36,21 @@ namespace SIAAN_1._1._1
         public MainWindow()
         {
             InitializeComponent();
+            
+            RegistryKey key = Registry.LocalMachine.OpenSubKey("Software", true);
+
+            key.CreateSubKey("SIAAN");
+            key = key.OpenSubKey("SIAAN", true);
+
+
+            if (key.GetValue("Informado") == null)
+            {
+                key.SetValue("Informado", "ok");
+                MessageBox.Show("Baixe os pacotes necessários para o programa funcionar.");
+            }
+
+            
+
             Application.Current.SessionEnding += Current_SessionEnding;
         }
 
@@ -299,6 +315,42 @@ ressu.Add(linha);
 
             if (methInfo != null)
                 Console.WriteLine(methInfo.Invoke(null, null));
+        }
+
+        private void download_reconhecimento(object sender, RoutedEventArgs e)
+        {
+
+            Process.Start("http://download.microsoft.com/download/4/0/D/40D6347A-AFA5-417D-A9BB-173D937BEED4/MSSpeech_SR_pt-BR_TELE.msi.msi");
+            
+        }
+
+        private void sdk_download(object sender, RoutedEventArgs e)
+        {
+            if (Environment.Is64BitOperatingSystem)
+            {
+                Process.Start("http://download.microsoft.com/download/2/2/5/225F4CFA-8B54-41DB-98C1-47F5A300BBF6/x64_MicrosoftSpeechPlatformSDK/MicrosoftSpeechPlatformSDK.msi");
+            }
+            else
+            {
+                Process.Start("http://download.microsoft.com/download/2/2/5/225F4CFA-8B54-41DB-98C1-47F5A300BBF6/x86_MicrosoftSpeechPlatformSDK/MicrosoftSpeechPlatformSDK.msi");
+            }
+        }
+
+        private void sintese_download(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://download.microsoft.com/download/4/0/D/40D6347A-AFA5-417D-A9BB-173D937BEED4/MSSpeech_TTS_pt-BR_Heloisa.msi");
+        }
+
+        private void runtime_speech(object sender, RoutedEventArgs e)
+        {
+            if (Environment.Is64BitOperatingSystem)
+            {
+                Process.Start("http://download.microsoft.com/download/A/6/4/A64012D6-D56F-4E58-85E3-531E56ABC0E6/x64_SpeechPlatformRuntime/SpeechPlatformRuntime.msi");
+            }
+            else
+            {
+                Process.Start("http://download.microsoft.com/download/A/6/4/A64012D6-D56F-4E58-85E3-531E56ABC0E6/x86_SpeechPlatformRuntime/SpeechPlatformRuntime.msi");
+            }
         }
         
 
