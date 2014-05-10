@@ -1,0 +1,15 @@
+fale sobre o sistema operacional
+cite os planetas do sistema solar
+feche o visual studio
+gin defina a equivalência massa-energia
+ajuda aqui
+ desligar a máquina
+gin feche o programa
+fala teste
+ajuda aqui
+gin informe o clima 
+positivo
+sim
+não
+negativo
+falas presentes

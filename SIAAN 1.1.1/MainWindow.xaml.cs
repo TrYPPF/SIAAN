@@ -18,6 +18,8 @@ using System.Reflection;
 using Microsoft.CSharp;
 using System.CodeDom.Compiler;
 using System.Management;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace SIAAN_1._1._1
 {
@@ -27,6 +29,9 @@ namespace SIAAN_1._1._1
     public partial class MainWindow : Window
     {
         Reconhecer reconhecedor;
+        string conteudo;
+        StringBuilder cons = new StringBuilder();
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -67,15 +72,56 @@ namespace SIAAN_1._1._1
 
                 engine.SpeechRecognized += engine_SpeechRecognized;
 
-                reconhecedor.escolhas = new string[] {"fale sobre o sistema operacional","cite os planetas do sistema solar","feche o visual studio","gin defina a equivalência massa-energia","ajuda aqui", "desligar a máquina","gin feche o programa","fala teste","ajuda aqui","gin informe o clima" ,"positivo","sim","não","negativo","falas presentes"};
+                try
+                {
+                    string linha ;
+                    StreamReader falas = new StreamReader(Environment.CurrentDirectory + @"\Falas.txt");
+                    List<string> ressu = new List<string>();
+                    while((linha=falas.ReadLine())!=null){
+                       //if(Regex.IsMatch(linha, @"^[a-zA-Z\s]+$")){
+ressu.Add(linha);
+                       //}
+                       
+                        
+                    }
+                    /*if (!ressu.Any())
+                    {
+                        MessageBox.Show("Por favor, só é permitido no arquivo de falas letras, números e espaços", "Erro!", MessageBoxButton.OK, MessageBoxImage.Error);  
+                    }*/
+                    falas.Close();
+                    if (ressu.Any())
+                    {
+                        reconhecedor.escolhas = ressu.ToArray();
+                        reconhecedor.gramatica = new GrammarBuilder();
 
-                reconhecedor.gramatica = new GrammarBuilder();
 
-                
 
-                
 
-                reconhecedor.Recognize(RecognizeMode.Multiple);
+
+                        reconhecedor.Recognize(RecognizeMode.Multiple);
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Não há nada neste arquivo.", "Erro!", MessageBoxButton.OK, MessageBoxImage.Error);
+                        
+                    }
+                    
+                    //Regex.IsMatch(input, @"^[a-zA-Z]+$");
+                }
+                catch (InvalidOperationException ee)
+                {
+                    
+                    MessageBox.Show("Um erro ocorreu: \n\n" + ee.Message, "Erro!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (FileNotFoundException ee)
+                {
+                    MessageBox.Show("Um erro ocorreu: \n\n" + ee.Message, "Erro!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                //reconhecedor.escolhas = new string[] {"fale sobre o sistema operacional","cite os planetas do sistema solar","feche o visual studio","gin defina a equivalência massa-energia","ajuda aqui", "desligar a máquina","gin feche o programa","fala teste","ajuda aqui","gin informe o clima" ,"positivo","sim","não","negativo","falas presentes"};
+
+               
             }
             catch (InvalidOperationException ee)
             {
@@ -101,113 +147,17 @@ namespace SIAAN_1._1._1
             }
         }
 
-        int desligarmento=0;
-        int iraoppf = 0;
-        private int fechar_visual=0;
+        
 
 
         void engine_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
-            if ((e.Result.Text=="positivo"||e.Result.Text == "sim") && desligarmento == 1)
-            {
-                falar("Desligando...");
-                Process.Start("shutdown", "-f -t 0 -s");
-                desligarmento = 0;
-            }
-            if (desligarmento == 1 && (e.Result.Text == "negativo" || e.Result.Text == "não"))
-            {
-                falar("Processo de desligamento cancelado!");
-                desligarmento = 0;
-            }
-            if ((e.Result.Text == "positivo" || e.Result.Text == "sim") && fechar_visual == 1)
-            {
-                falar("Fechando...");
-                Process[] pro = Process.GetProcessesByName("devenv");
-
-                janela.Close();
-                foreach (Process pp in pro)
-                {
-                    pp.Kill();
-                }
-                fechar_visual = 0;
-            }
-            if (fechar_visual == 1 && (e.Result.Text == "negativo" || e.Result.Text == "não"))
-            {
-                falar("Processo de fechamento cancelado!");
-               fechar_visual = 0;
-            }
-            if ((e.Result.Text == "positivo" || e.Result.Text == "sim") && iraoppf == 1)
-            {
-                falar("Abrindo página web!");
-                Process.Start("http://www.power-pixel.net/t57094-siaan-comandos-versao-teste");
-                iraoppf = 0;
-            }
-            if (iraoppf == 1 && (e.Result.Text == "negativo" || e.Result.Text == "não"))
-            {
-                falar("Cancelado!!");
-                iraoppf = 0;
-            }
-            try
-            {
-                switch (e.Result.Text)
-                {
-                    case "fale sobre o sistema operacional":
-                        StringBuilder eae = new StringBuilder();
-                        eae.AppendLine(String.Format("Nome: {0}",Environment.OSVersion));
-                        eae.AppendLine(String.Format("Arquitetura: {0} bits", Environment.Is64BitOperatingSystem?"64":"32"));
-                        fala.Text += eae;
-                        falar("Informações adicionadas a área de texto.");
-                        break;
-                    case "cite os planetas do sistema solar":
-                       
-                        falar("Sim senhor, os planetas rochosos são, a partir da distância do Sol: Mercúrio, Vênus, Terra, Marte. E os planetas jupiterianos, os gigantes gasosos: Júpiter, Saturno, Urano e Netuno. Plutão foi rebaixado a planeta-anão em 2006.");
-                        break;
-                    case "gin defina a equivalência massa-energia":
-                        falar("Foi uma teoria de Albert Einstein que massa e energia estão sempre associados, a equação é:  É igual a mc ao quadrado, isto é, a energia em Jaules é igual a massa vezes a luz no vácuo ao quadrado, velocidade da luz no vácuo é 299792458 metros por segundo!");
-                        break;
-                    case "falas presentes":
-                        falar("O senhor deseja que eu liste as falas presentes? Necessito abrir uma págna web!");
-                        iraoppf = 1;
-                        break;
-                    case "ajuda aqui":
-                        falar("Caro senhor, meu nome é Gin, este é o projeto SIAAN, ele é um projeto com finalidade de criar uma assitente virtual que reconheça voz e face para facilitar diversos trabalhos, como esta é a versão de teste o Design e funcionalidades são limitadas. Breve o será adicionado mais comandos, outros idiomas e um melhor design. Existem alguns comandos secretos nesse programa, tente descobri-los!");
-                        break;
-                    case "desligar a máquina":
-                        falar("O senhor deseja mesmo desligar a máquina?");
-                        desligarmento = 1;
-                        break;
-                    case "gin que horas são?":
-                        falar("Senhor, são: " + DateTime.Now.Hour + " e " + DateTime.Now.Minute + "");
-
-                        break;
-                    case "gin feche o programa":
-                        falar("Até mais senhor!");
-                        janela.Close();
-                        break;
-                    case "fala teste":
-                        falar("Escutei sua voz , tudo funcionando 100%");
-                        break;
-                    case "gin informe o clima":
-                        Funcionalidades ee = new Funcionalidades();
-                        ee.obter_Temperatura("http://weather.yahooapis.com/forecastrss?w=455825&u=c", true, true, true);
-                        falar(ee.retorno);
-                        break;
-                    case "feche o visual studio":
-                        falar("O senhor deseja mesmo fechar o visual studio forçado?");
-                        fechar_visual = 1;
-
-                        break;
-                }
-            }
-            catch (InvalidOperationException eee)
-            {
-                MessageBox.Show("Um erro ocorreu: \n\n" + eee.Message, "Erro...", MessageBoxButton.OK, MessageBoxImage.Error);
-
-            }
-            catch (Exception eee)
-            {
-                MessageBox.Show("Um erro ocorreu: \n\n" + eee.Message, "Erro...", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+           Acoes acoes = new Acoes();
+            acoes.janela = janela;
+            acoes.retornno = retornno;
+            acoes.slider = slider;
+            acoes.texto = e.Result.Text;
+            acoes.reconhecer();
         }
 
         private void falar(string p)
@@ -291,6 +241,64 @@ namespace SIAAN_1._1._1
             MessageBox.Show("Na versão de teste, este comando ainda não está disponível!","Informação",MessageBoxButton.OK,MessageBoxImage.Information);
             
             
+        }
+
+        private void pulae(object sender, RoutedEventArgs e)
+        {
+            string maria ;
+           string oo;
+            try
+            {
+               StreamReader cconteudo  = new StreamReader(Environment.CurrentDirectory + @"\falas.txt");
+
+               while((oo=cconteudo.ReadLine())!=null)
+               {
+                   cons.AppendLine(oo);
+               }
+               cconteudo.Close();
+            }
+               
+            catch (Exception ee)
+            {
+                Console.WriteLine(ee.Message);
+            }
+
+            Console.WriteLine(cons.ToString());
+            CompileAndRun(cons.ToString());
+
+        }
+        static void CompileAndRun(string code)
+        {
+            var csc = new CSharpCodeProvider();
+            var parameters = new CompilerParameters(new[] { "mscorlib.dll", "System.Core.dll" }, "teste.exe", true)
+            {
+                GenerateExecutable = true
+            };
+            CompilerResults compiledAssembly = csc.CompileAssemblyFromSource(parameters,
+            code);
+
+            var errors = compiledAssembly.Errors
+                                         .Cast<CompilerError>()
+                                         .ToList();
+
+            if (errors.Any())
+            {
+                errors.ForEach(Console.WriteLine);
+                return;
+            }
+
+            Module module = compiledAssembly.CompiledAssembly.GetModules()[0];
+
+            Type mt = null;
+            if (module != null)
+                mt = module.GetType("Program");
+
+            MethodInfo methInfo = null;
+            if (mt != null)
+                methInfo = mt.GetMethod("Main");
+
+            if (methInfo != null)
+                Console.WriteLine(methInfo.Invoke(null, null));
         }
         
 

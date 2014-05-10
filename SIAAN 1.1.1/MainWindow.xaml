@@ -138,7 +138,7 @@
             <TabItem Header="Reconhecer voz" Style="{DynamicResource tabitem}" Background="#FFBFCBEC" Padding="10,2">
                 <Grid Background="#FFD6DBE9">
                     <Label Content="Retornos:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Left" Height="118" Margin="96,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="421" IsEnabled="False"/>
+                    <TextBox x:Name="retornno" HorizontalAlignment="Left" Height="118" Margin="96,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="421" IsEnabled="False"/>
                     <Button x:Name="falar_botao" Content="Falar" HorizontalAlignment="Left" Height="52" Margin="96,157,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource bbotao}" Click="falar_botao_Click"/>
                     <Button x:Name="parar_botao" Content="Parar" HorizontalAlignment="Left" Height="52" Margin="399,157,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource bbotao}"  IsEnabled="False" Click="parar_botao_Click"/>
                 </Grid>
