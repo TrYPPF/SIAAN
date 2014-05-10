@@ -1,4 +1,4 @@
-﻿<Window x:Class="SIAAN_1._1._1.MainWindow"
+<Window x:Class="SIAAN_1._1._1.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Width="568.283" Height="408.21" Style="{DynamicResource wwindow}" x:Name="janela">
@@ -143,6 +143,19 @@
                     <Button x:Name="parar_botao" Content="Parar" HorizontalAlignment="Left" Height="52" Margin="399,157,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource bbotao}"  IsEnabled="False" Click="parar_botao_Click"/>
                 </Grid>
 
+            </TabItem>
+            <TabItem Header="Download dos Pacotes" Style="{DynamicResource tabitem}" Background="#FFBFCBEC" Padding="10,2">
+                <Grid Background="#FFD6DBE9">
+                    <Label Content="Reconhecimento de voz: " HorizontalAlignment="Left" Margin="10,26,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="falar_botao_Copy" Content="Download" HorizontalAlignment="Left" Height="39" Margin="187,19,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource bbotao}" Click="download_reconhecimento"/>
+                    <Label Content="Speech SDK: " HorizontalAlignment="Left" Margin="10,81,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="falar_botao_Copy1" Content="Download" HorizontalAlignment="Left" Height="39" Margin="187,74,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource bbotao}" Click="sdk_download"/>
+                    <Label Content="Síntese de voz:  " HorizontalAlignment="Left" Margin="10,133,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="falar_botao_Copy2" Content="Download" HorizontalAlignment="Left" Height="39" Margin="187,126,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource bbotao}" Click="sintese_download"/>
+                    <Label Content="Speech Runtime:   " HorizontalAlignment="Left" Margin="10,186,0,0" VerticalAlignment="Top"/>
+                    <Button x:Name="falar_botao_Copy3" Content="Download" HorizontalAlignment="Left" Height="39" Margin="187,179,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource bbotao}" Click="runtime_speech"/>
+
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>
