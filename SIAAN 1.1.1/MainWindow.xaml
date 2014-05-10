@@ -144,7 +144,7 @@
                 </Grid>
 
             </TabItem>
-            <TabItem Header="Download dos Pacotes" Style="{DynamicResource tabitem}" Background="#FFBFCBEC" Padding="10,2">
+            <TabItem x:Name="pacotesdown" Header="Download dos Pacotes" Style="{DynamicResource tabitem}" Background="#FFBFCBEC" Padding="10,2">
                 <Grid Background="#FFD6DBE9">
                     <Label Content="Reconhecimento de voz: " HorizontalAlignment="Left" Margin="10,26,0,0" VerticalAlignment="Top"/>
                     <Button x:Name="falar_botao_Copy" Content="Download" HorizontalAlignment="Left" Height="39" Margin="187,19,0,0" VerticalAlignment="Top" Width="118" Style="{DynamicResource bbotao}" Click="download_reconhecimento"/>
